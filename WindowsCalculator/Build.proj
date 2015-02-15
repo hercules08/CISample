@@ -1,14 +1,14 @@
 <Project DefaultTargets="Build;Deploy;" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<PropertyGroup>
+  <PropertyGroup>
     <MSBuildCommunityTasksPath>.</MSBuildCommunityTasksPath>
-    <RevisionNumber Condition=" '$(RevisionNumber)' == '' ">x</RevisionNumber>
+    <RevisionNumber Condition=" '$(RevisionNumber)' == '' ">0</RevisionNumber>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-	</PropertyGroup>
+  </PropertyGroup>
   <Import Project="..\tools\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
   <!-- Maps the task to the implementing assembly -->
   <UsingTask AssemblyFile="..\tools\MyMSBuildExtensions\BuildTasks.MSBuildTasks.dll"
              TaskName="BuildTasks.MSBuildTasks.AssemblyInfoReader"></UsingTask>
-  
+
   <ItemGroup>
     <SetupSourceFiles Include="WinCalc\bin\$(Configuration)\WinCalc.exe" />
   </ItemGroup>
@@ -23,8 +23,7 @@
                 ReplacementText="$1.$2.$3.$(RevisionNumber)" />
 
     <MSBuild Targets="Clean;Rebuild" Projects="WindowsCalculator.sln" />
-  
-</Target>
+  </Target>
 
   <Target Name="Deploy">
     <!-- Our custom task reads assembly version -->
@@ -36,8 +35,8 @@
     <Zip Files="@(SetupSourceFiles)"
          ZipFileName ="WinCalc.%(Version.Identity).zip"
          Flatten="true" ContinueOnError="false" />
-    
-    <Copy SourceFiles="WinCalc.%(Version.Idenity).zip"
+
+    <Copy SourceFiles="WinCalc.%(Version.Identity).zip"
           DestinationFolder="c:\dev\calcsample\release" />
 
     <Delete Files="WinCalc.%(Version.Identity).zip" />
