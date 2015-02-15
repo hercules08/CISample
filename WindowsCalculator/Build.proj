@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <Target Name="Build">
-    <GitBranch>
-      <Output TaskParameter="Branch" PropertyName="RevisionNumber" />
-    </GitBranch>
+    <GitDescribe>
+      <Output TaskParameter="Tag" PropertyName="RevisionNumber" />
+    </GitDescribe>
     <!-- Use regex to update the assembly info -->
     <FileUpdate Files="WinCalc\Properties\AssemblyInfo.cs"
                 Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
