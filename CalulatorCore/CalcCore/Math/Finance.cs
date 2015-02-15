@@ -5,7 +5,16 @@ using System.Text;
 
 namespace CalcCore.Math
 {
-    class Finance
+    interface IFinance
     {
+        int Add(int x, int y);
+    }
+
+    class Finance:IFinance
+    {
+        public int Add(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
