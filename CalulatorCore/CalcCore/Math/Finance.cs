@@ -14,7 +14,7 @@ namespace CalcCore.Math
     {
         public int Add(int x, int y)
         {
-            throw new NotImplementedException();
+            return (x + y);
         }
     }
 }
