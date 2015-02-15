@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <Target Name="Build">
-    <GitDescribe>
+    <GitDescribe Arguments="--tags">
       <Output TaskParameter="Tag" PropertyName="RevisionNumber" />
     </GitDescribe>
     <!-- Use regex to update the assembly info -->
