@@ -8,6 +8,7 @@ namespace CalcCore.Math
     interface IFinance
     {
         int Add(int x, int y);
+        int Subtract(int x, int y);
     }
 
     class Finance:IFinance
@@ -16,5 +17,10 @@ namespace CalcCore.Math
         {
             return (x + y);
         }
+
+        //public int Subtract(int x, int y)
+        //{
+        //    return (x - y);
+        //}
     }
 }
