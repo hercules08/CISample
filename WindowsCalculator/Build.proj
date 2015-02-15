@@ -1,5 +1,45 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Target Name="Build">
-		<MSBuild Targets="Clean;Rebuild" Projects="WindowsCalculator.sln" />
-	</Target>
+<Project DefaultTargets="Build;Deploy;" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+    <MSBuildCommunityTasksPath>.</MSBuildCommunityTasksPath>
+    <RevisionNumber Condition=" '$(RevisionNumber)' == '' ">x</RevisionNumber>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	</PropertyGroup>
+  <Import Project="..\tools\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+  <!-- Maps the task to the implementing assembly -->
+  <UsingTask AssemblyFile="..\tools\MyMSBuildExtensions\BuildTasks.MSBuildTasks.dll"
+             TaskName="BuildTasks.MSBuildTasks.AssemblyInfoReader"></UsingTask>
+  
+  <ItemGroup>
+    <SetupSourceFiles Include="WinCalc\bin\$(Configuration)\WinCalc.exe" />
+  </ItemGroup>
+
+  <Target Name="Build">
+    <GitBranch>
+      <Output TaskParameter="Branch" PropertyName="RevisionNumber" />
+    </GitBranch>
+    <!-- Use regex to update the assembly info -->
+    <FileUpdate Files="WinCalc\Properties\AssemblyInfo.cs"
+                Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
+                ReplacementText="$1.$2.$3.$(RevisionNumber)" />
+
+    <MSBuild Targets="Clean;Rebuild" Projects="WindowsCalculator.sln" />
+  
+</Target>
+
+  <Target Name="Deploy">
+    <!-- Our custom task reads assembly version -->
+    <AssemblyInfoReader Path="WinCalc\Properties\AssemblyInfo.cs"
+                        Property="AssemblyVersion">
+      <Output TaskParameter="Value" ItemName="Version" />
+    </AssemblyInfoReader>
+
+    <Zip Files="@(SetupSourceFiles)"
+         ZipFileName ="WinCalc.%(Version.Identity).zip"
+         Flatten="true" ContinueOnError="false" />
+    
+    <Copy SourceFiles="WinCalc.%(Version.Idenity).zip"
+          DestinationFolder="c:\dev\calcsample\release" />
+
+    <Delete Files="WinCalc.%(Version.Identity).zip" />
+  </Target>
 </Project>
