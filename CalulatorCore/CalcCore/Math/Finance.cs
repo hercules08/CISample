@@ -23,5 +23,11 @@ namespace CalcCore.Math
         {
             return (x - y);
         }
+
+
+        public int Multiply(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
