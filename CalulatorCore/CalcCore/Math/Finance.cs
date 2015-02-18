@@ -9,6 +9,7 @@ namespace CalcCore.Math
     {
         int Add(int x, int y);
         int Subtract(int x, int y);
+        int Multiply(int x, int y);
     }
 
     class Finance:IFinance
